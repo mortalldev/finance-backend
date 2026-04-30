@@ -110,8 +110,6 @@ export class AuthService {
     const { passwordHash, refreshTokenHash, ...userResponse } = user
     return {
       user: userResponse,
-      accessToken: accessToken,
-      refreshToken: refreshToken, // Refresh tokenni ham qaytaramiz
     }
   }
 }
