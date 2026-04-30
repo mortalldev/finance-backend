@@ -86,9 +86,8 @@ export class AuthService {
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10)
     await this.userService.updateRefreshToken(user.id, hashedRefreshToken)
 
-    const isProd =
-      process.env.NODE_ENV === 'production' || !!process.env.RENDER || process.env.VERCEL === '1'
-    const sameSite = isProd ? 'none' : 'lax'
+    const isProd = process.env.NODE_ENV === 'production' || !!process.env.RENDER
+    const sameSite = isProd ? 'lax' : 'lax' // Proxy orqali 'lax' ideal ishlaydi
     const secure = isProd
 
     response.cookie('access_token', accessToken, {

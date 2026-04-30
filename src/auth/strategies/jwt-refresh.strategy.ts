@@ -13,7 +13,6 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
-        ExtractJwt.fromAuthHeaderAsBearerToken(),
         (request: Request) => {
           return request?.cookies?.refresh_token
         },
@@ -25,8 +24,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
   }
 
   async validate(request: Request, payload: any) {
-    const refreshToken =
-      ExtractJwt.fromAuthHeaderAsBearerToken()(request) || request?.cookies?.refresh_token
+    const refreshToken = request?.cookies?.refresh_token
     const user = await this.userService.getUserIfRefreshTokenMatches(refreshToken, payload.sub)
     if (!user) {
       throw new UnauthorizedException()
