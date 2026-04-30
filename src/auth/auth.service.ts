@@ -86,21 +86,25 @@ export class AuthService {
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10)
     await this.userService.updateRefreshToken(user.id, hashedRefreshToken)
 
-    const isProd = process.env.NODE_ENV === 'production' || !!process.env.RENDER
+    const isProd =
+      process.env.NODE_ENV === 'production' || !!process.env.RENDER || process.env.VERCEL === '1'
     const sameSite = isProd ? 'none' : 'lax'
+    const secure = isProd
 
     response.cookie('access_token', accessToken, {
       httpOnly: true,
-      secure: isProd,
+      secure: secure,
       sameSite: sameSite,
       maxAge: 15 * 60 * 1000, // 15 min
+      path: '/',
     })
 
     response.cookie('refresh_token', refreshToken, {
       httpOnly: true,
-      secure: isProd,
+      secure: secure,
       sameSite: sameSite,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      path: '/',
     })
 
     const { passwordHash, refreshTokenHash, ...userResponse } = user
