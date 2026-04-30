@@ -108,6 +108,9 @@ export class AuthService {
     })
 
     const { passwordHash, refreshTokenHash, ...userResponse } = user
-    return { user: userResponse }
+    return {
+      user: userResponse,
+      accessToken: accessToken, // Tokenni body orqali ham qaytaramiz
+    }
   }
 }
