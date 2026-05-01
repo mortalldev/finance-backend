@@ -11,7 +11,9 @@ import { seedDemoUser } from './seeds/demo-user.seed'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-  app.setGlobalPrefix('api')
+  app.setGlobalPrefix('api', {
+    exclude: ['health', ''],
+  })
   const configService = app.get(ConfigService)
 
   app.useGlobalPipes(
