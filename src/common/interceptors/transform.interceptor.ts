@@ -11,10 +11,8 @@ export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> 
   intercept(context: ExecutionContext, next: CallHandler): Observable<Response<T>> {
     return next.handle().pipe(
       map((data) => {
-        if (data && data.meta) {
-          return data
-        }
-        if (data && data.message && Object.keys(data).length === 1) {
+        // If the response already has pagination metadata, return it as is
+        if (data && data.data && data.meta) {
           return data
         }
         return { data }
